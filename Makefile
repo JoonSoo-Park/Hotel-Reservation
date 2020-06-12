@@ -1,5 +1,5 @@
 GCC = g++
-CXXFLAGS = -w
+CXXFLAGS = -w -g
 OBJECTS = room.o hotel.o main.o
 
 TARGET = main
@@ -9,7 +9,7 @@ $(TARGET) : $(OBJECTS)
 
 room.o: constants.h
 
-hotel.o: room.h 
+hotel.o: room.h handle.h
 
 main.o: hotel.o
 
