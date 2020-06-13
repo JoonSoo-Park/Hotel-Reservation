@@ -16,6 +16,7 @@ void do_work(hotel* hot, MENU_INPUT m)
         hot->show_reservation_state();
         break; 
     case MENU_INPUT::CANCLE_RESERVATION:
+        hot->cancle_reservation();
         break;
     case MENU_INPUT::QUIT:
         puts("Exiting program");

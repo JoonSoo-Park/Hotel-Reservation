@@ -11,6 +11,7 @@ public:
     void initialize();
     void print_info() const;
     int reserve();
+    void cancle_reservation();
     void show_reservation_state() const;
     void exit_program() {
         running = false;

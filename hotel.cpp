@@ -27,18 +27,40 @@ void hotel::print_info() const {
 // TODO: 오류 처리... 정수 외 입력 시 segmentation fault
 int hotel::reserve() {
     int start, end;
+    char c;
+    bool success = false;
 
     do {
-        printf("Enter starting date, end date: ");
-        getchar();
-    } while (scanf("%d %d", &start, &end) != 2);
+        printf("Enter starting date(-1 to cancle): ");
+        success = scanf("%d", &start);
+        while ((c = getchar()) != '\n');
+        if (!success) continue;
+        if (start == -1) return -1;
+
+        printf("Enter end date(-1 to cancle): ");
+        success = scanf("%d", &end);
+        while ((c = getchar()) != '\n');
+        if (end == -1) return -1;
+    } while (!success);
     print_available_rooms(start, end);
 
     int n;
-    printf("Enter room number to reserve: ");
-    scanf("%d", &n);
-
+    do {
+        printf("Enter room number to reserve(-1 to cancle): ");
+        success = scanf("%d", &n);
+        while ((c = getchar()) != '\n');
+        if (!success) continue;
+        if (n == -1) return -1;
+    } while (!success);
+        
     rooms[n]->reserve(start, end);
+    return 0; // success
+}
+
+void hotel::cancle_reservation() {
+    puts("************ Cancle Reservation **************");
+    show_reservation_state();
+
 }
 
 void hotel::print_available_rooms(int start, int end) const {
@@ -52,11 +74,18 @@ void hotel::print_available_rooms(int start, int end) const {
 }
 
 void hotel::show_reservation_state() const {
+    int count = 0;
+
+    puts("************ Room Reservation State **************");
     for (vector<room*>::size_type i = 0; i < rooms.size(); ++i) {
         if (rooms[i]) {
             cout << "room" << static_cast<int>(i) << endl;
             rooms[i]->show_reservation_state();
             cout << endl;
+            count++;
         }
     } 
+    if (count == 0) {
+        puts("No room is reserved");
+    }
 }
