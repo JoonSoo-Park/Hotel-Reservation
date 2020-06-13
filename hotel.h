@@ -19,6 +19,7 @@ public:
     bool is_running() const {
         return running;
     }
+    static int get_input_with_msg(const char*, int&);
 private:
     // std::vector<room*> rooms;
     std::vector<Handle<room> > rooms;

@@ -30,28 +30,18 @@ int hotel::reserve() {
     char c;
     bool success = false;
 
-    do {
-        printf("Enter starting date(-1 to cancle): ");
-        success = scanf("%d", &start);
-        while ((c = getchar()) != '\n');
-        if (!success) continue;
-        if (start == -1) return -1;
-
-        printf("Enter end date(-1 to cancle): ");
-        success = scanf("%d", &end);
-        while ((c = getchar()) != '\n');
-        if (end == -1) return -1;
-    } while (!success);
+    if ((get_input_with_msg("Enter starting date(-1 to cancle): ", start)) == -1) {
+        return -1;
+    }
+    if ((get_input_with_msg("Enter ending date(-1 to cancle): ", end)) == -1) {
+        return -1;
+    }
     print_available_rooms(start, end);
 
     int n;
-    do {
-        printf("Enter room number to reserve(-1 to cancle): ");
-        success = scanf("%d", &n);
-        while ((c = getchar()) != '\n');
-        if (!success) continue;
-        if (n == -1) return -1;
-    } while (!success);
+    if ((get_input_with_msg("Enter room number to reserve(-1 to cancle)", n)) == -1) {
+        return -1;
+    }
         
     rooms[n]->reserve(start, end);
     return 0; // success
@@ -88,4 +78,20 @@ void hotel::show_reservation_state() const {
     if (count == 0) {
         puts("No room is reserved");
     }
+}
+
+int hotel::get_input_with_msg(const char* msg, int& n)
+{
+    bool success = false;
+    char c;
+
+    do {
+        printf("%s", msg);
+        success = scanf("%d", &n);
+        while ((c = getchar()) != '\n');
+        if (!success) continue;
+        if (n == -1) return -1;
+    } while (!success);
+
+    return 0; // when success;
 }
