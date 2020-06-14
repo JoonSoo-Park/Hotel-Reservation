@@ -29,9 +29,13 @@ void room::cancle_reservation() {
     show_reservation_state();
 
     int idx;
-    get_input_with_msg("Enter reservation number to cancle", idx);
+    get_input_with_msg("Enter reservation number to cancle: ", idx);
 
-    dates.erase(dates.begin() + idx);
+    if (idx >= 0 && idx < dates.size()) {
+        dates.erase(dates.begin() + idx);
+    } else {
+        throw std::runtime_error("Invalid reservation number!");
+    }
 }
 
 void room::show_reservation_state() const {

@@ -55,8 +55,12 @@ void hotel::cancle_reservation() {
         int room_number = 0;
         get_input_with_msg("Enter room number to cancle: ", room_number);
 
-        int idx = 0;
-        rooms[room_number]->cancle_reservation();
+        if (room_number >= 0 && room_number < rooms.size()) {
+            int idx = 0;
+            rooms[room_number]->cancle_reservation();
+        } else {
+            throw std::runtime_error("Invalid room number!");
+        }
     }
 }
 
