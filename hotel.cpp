@@ -24,7 +24,6 @@ void hotel::print_info() const {
     }
 }
 
-// TODO: 오류 처리... 정수 외 입력 시 segmentation fault
 int hotel::reserve() {
     int start, end;
     char c;
@@ -48,7 +47,7 @@ int hotel::reserve() {
 }
 
 void hotel::cancle_reservation() {
-    puts("************ Cancle Reservation **************");
+    cout << "************ Cancle Reservation **************\n";
 
     int is_reserved = show_reservation_state();
 
@@ -62,11 +61,11 @@ void hotel::cancle_reservation() {
 }
 
 void hotel::print_available_rooms(int start, int end) const {
-    printf("************ Available rooms list **************\n");
+    cout << "************ Available rooms list **************\n";
 
     for (vector<room*>::size_type i = 0; i < rooms.size(); ++i) {
         if (rooms[i]->available(start, end)) {
-            printf("room[%d]\n", static_cast<int>(i));
+            cout << "room[" << static_cast<int>(i) << "]\n";
         }
     }
 }
@@ -74,7 +73,7 @@ void hotel::print_available_rooms(int start, int end) const {
 int hotel::show_reservation_state() const {
     int count = 0;
 
-    puts("************ Room Reservation State **************");
+    cout << "************ Room Reservation State **************\n";
     for (vector<room*>::size_type i = 0; i < rooms.size(); ++i) {
         if (rooms[i]) {
             cout << "room" << static_cast<int>(i) << endl;
@@ -84,7 +83,7 @@ int hotel::show_reservation_state() const {
         }
     } 
     if (count == 0) {
-        puts("No rooms are reserved");
+        cout << "No rooms are reserved\n";
     }
     return count;
 }

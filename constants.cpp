@@ -1,4 +1,7 @@
 #include "./constants.h"
+#include <iostream>
+
+using std::cout;
 
 int get_input_with_msg(const char* msg, int& n)
 {
@@ -6,7 +9,7 @@ int get_input_with_msg(const char* msg, int& n)
     char c;
 
     do {
-        printf("%s", msg);
+        cout << msg;
         success = scanf("%d", &n);
         while ((c = getchar()) != '\n');
         if (!success) continue;
