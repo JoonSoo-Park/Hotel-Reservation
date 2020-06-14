@@ -22,6 +22,7 @@ public:
     void reserve(int start, int end);
     bool available(int start, int end) const;
     void show_reservation_state() const;
+    void cancle_reservation();
     virtual room* clone() const {
         return new room(*this);
     }

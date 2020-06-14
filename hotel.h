@@ -12,14 +12,13 @@ public:
     void print_info() const;
     int reserve();
     void cancle_reservation();
-    void show_reservation_state() const;
+    int show_reservation_state() const;
     void exit_program() {
         running = false;
     }
     bool is_running() const {
         return running;
     }
-    static int get_input_with_msg(const char*, int&);
 private:
     // std::vector<room*> rooms;
     std::vector<Handle<room> > rooms;

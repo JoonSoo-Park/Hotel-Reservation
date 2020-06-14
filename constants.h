@@ -49,4 +49,6 @@ private:
 
 };
 
+int get_input_with_msg(const char* msg, int& n);
+
 #endif

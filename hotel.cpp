@@ -49,8 +49,16 @@ int hotel::reserve() {
 
 void hotel::cancle_reservation() {
     puts("************ Cancle Reservation **************");
-    show_reservation_state();
 
+    int is_reserved = show_reservation_state();
+
+    if (is_reserved) {
+        int room_number = 0;
+        get_input_with_msg("Enter room number to cancle: ", room_number);
+
+        int idx = 0;
+        rooms[room_number]->cancle_reservation();
+    }
 }
 
 void hotel::print_available_rooms(int start, int end) const {
@@ -63,7 +71,7 @@ void hotel::print_available_rooms(int start, int end) const {
     }
 }
 
-void hotel::show_reservation_state() const {
+int hotel::show_reservation_state() const {
     int count = 0;
 
     puts("************ Room Reservation State **************");
@@ -76,22 +84,7 @@ void hotel::show_reservation_state() const {
         }
     } 
     if (count == 0) {
-        puts("No room is reserved");
+        puts("No rooms are reserved");
     }
-}
-
-int hotel::get_input_with_msg(const char* msg, int& n)
-{
-    bool success = false;
-    char c;
-
-    do {
-        printf("%s", msg);
-        success = scanf("%d", &n);
-        while ((c = getchar()) != '\n');
-        if (!success) continue;
-        if (n == -1) return -1;
-    } while (!success);
-
-    return 0; // when success;
+    return count;
 }

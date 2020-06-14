@@ -1,6 +1,6 @@
 GCC = g++
 CXXFLAGS = -w -g
-OBJECTS = room.o hotel.o main.o
+OBJECTS = constants.o room.o hotel.o main.o
 
 TARGET = main
 
@@ -11,7 +11,7 @@ room.o: constants.h
 
 hotel.o: room.h handle.h
 
-main.o: hotel.o
+main.o: hotel.h
 
 clean:
 	rm $(OBJECTS) $(TARGET)

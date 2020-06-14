@@ -25,11 +25,21 @@ bool room::available(int start, int end) const {
     return true;
 }
 
+void room::cancle_reservation() {
+    show_reservation_state();
+
+    int idx;
+    get_input_with_msg("Enter reservation number to cancle", idx);
+
+    dates.erase(dates.begin() + idx);
+}
+
 void room::show_reservation_state() const {
     for (vector<reserved_date>::size_type i = 0; i < dates.size(); ++i) {
         int start_date = dates[i].start_date;
         int end_date = dates[i].end_date;
 
+        cout << static_cast<int>(i) << " ";
         cout << "Reserved: " <<  start_date <<
             " ~ " << end_date << endl;
     }
