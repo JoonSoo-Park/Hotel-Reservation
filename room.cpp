@@ -1,8 +1,10 @@
 #include "./room.h"
 #include <iostream>
+#include <algorithm>
 
 using std::cout;
 using std::endl;
+using std::sort;
 
 using std::vector;
 
@@ -11,6 +13,8 @@ void room::reserve(int start, int end) {
     is_reserved = true;
 
     dates.push_back(temp);
+
+    sort (dates.begin(), dates.end(), compare_reservation);
 }
 
 bool room::available(int start, int end) const {
@@ -33,6 +37,9 @@ void room::cancle_reservation() {
 
     if (idx >= 0 && idx < dates.size()) {
         dates.erase(dates.begin() + idx);
+        if (dates.size() == 0) {
+            is_reserved = false;
+        }
     } else {
         throw std::runtime_error("Invalid reservation number!");
     }

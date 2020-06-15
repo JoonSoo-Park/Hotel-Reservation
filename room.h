@@ -29,6 +29,9 @@ public:
     operator bool() const {
         return is_reserved;
     }
+    static bool compare_reservation(reserved_date& r1, reserved_date& r2) {
+        return r1.start_date < r2.start_date;
+    }
 private:
     double price;
     int reserve_start_date;
