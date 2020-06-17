@@ -20,7 +20,6 @@ public:
         return running;
     }
 private:
-    // std::vector<room*> rooms;
     std::vector<Handle<room> > rooms;
     bool running;
 

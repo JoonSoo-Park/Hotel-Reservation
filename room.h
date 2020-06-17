@@ -3,7 +3,6 @@
 
 #include <stdio.h>
 #include <vector>
-#include "./constants.h"
 
 typedef struct {
     int start_date;
@@ -19,10 +18,10 @@ public:
     int get_reserve_end_date() const {
         return reserve_end_date;
     }
-    void reserve(int start, int end);
-    bool available(int start, int end) const;
-    void show_reservation_state() const;
+    virtual void reserve(int start, int end);
     void cancle_reservation();
+    virtual void show_reservation_state() const;
+    bool available(int start, int end) const;
     virtual room* clone() const {
         return new room(*this);
     }

@@ -1,4 +1,5 @@
 #include "./hotel.h"
+#include "./constants.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -41,7 +42,7 @@ void hotel::initialize() {
 }
 
 void hotel::print_info() const {
-    for (int i = 0; i < rooms.size(); ++i) {
+    for (vector<Handle<room> >::size_type i = 0; i < rooms.size(); ++i) {
         if (rooms[i]) {
             cout << "room" << i << " " << rooms[i]->get_price() << endl;
         }
@@ -91,7 +92,7 @@ void hotel::cancle_reservation() {
 void hotel::print_available_rooms(int start, int end) const {
     cout << "************ Available rooms list **************\n";
 
-    for (vector<room*>::size_type i = 0; i < rooms.size(); ++i) {
+    for (vector<Handle<room> >::size_type i = 0; i < rooms.size(); ++i) {
         if (rooms[i]->available(start, end)) {
             cout << "room[" << static_cast<int>(i) << "]\n";
         }
@@ -102,7 +103,7 @@ int hotel::show_reservation_state() const {
     int count = 0;
 
     cout << "************ Room Reservation State **************\n";
-    for (vector<room*>::size_type i = 0; i < rooms.size(); ++i) {
+    for (vector<Handle<room> >::size_type i = 0; i < rooms.size(); ++i) {
         if (rooms[i]) {
             cout << "room" << static_cast<int>(i) << endl;
             rooms[i]->show_reservation_state();

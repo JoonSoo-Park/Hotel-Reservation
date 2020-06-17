@@ -1,11 +1,11 @@
 #include "./room.h"
+#include "./constants.h"
 #include <iostream>
 #include <algorithm>
 
 using std::cout;
 using std::endl;
 using std::sort;
-
 using std::vector;
 
 void room::reserve(int start, int end) {
