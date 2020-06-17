@@ -2,6 +2,7 @@
 #include <vector>
 #include <stdexcept>
 #include "./hotel.h"
+#include "./Menu.h"
 
 using namespace std;
 

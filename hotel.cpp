@@ -1,23 +1,47 @@
 #include "./hotel.h"
 #include <iostream>
+#include <fstream>
+#include <string>
 
 using namespace std;
 
+enum ROOM_TYPE {
+    SINGLE = 1,
+    SWEET
+};
+
 void hotel::initialize() {
-    rooms[0] = new single();
-    rooms[1] = new single();
-    rooms[2] = new single();
-    rooms[3] = new single();
-    rooms[4] = new single();
-    rooms[5] = new single();
-    rooms[6] = new single();
-    rooms[7] = new sweet();
-    rooms[8] = new sweet();
-    rooms[9] = new sweet();
+    string line;
+    ifstream infile("room_init.txt");
+
+    if (!infile.is_open()) {
+        cerr << "Failed to open file!\n";
+        return;
+    }
+
+    while (getline(infile, line)) {
+        if (line.empty())
+            break;
+    } 
+
+    ROOM_TYPE room_number;
+    ROOM_TYPE room_type;
+    while (getline(infile, line)) {
+        sscanf(line.c_str(), "%d : %d", &room_number, &room_type);
+        if (room_type == ROOM_TYPE::SINGLE) {
+            rooms.push_back(Handle<room>(new single()));
+        } 
+        else if (room_type == ROOM_TYPE::SWEET) {
+            rooms.push_back(Handle<room>(new sweet()));
+        }
+    }
+    infile.close();
+
+    running = true;
 }
 
 void hotel::print_info() const {
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < rooms.size(); ++i) {
         if (rooms[i]) {
             cout << "room" << i << " " << rooms[i]->get_price() << endl;
         }

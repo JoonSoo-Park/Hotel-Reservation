@@ -6,7 +6,7 @@
 
 class hotel {
 public:
-    hotel() : rooms(10), running(true) { initialize(); }
+    hotel() : rooms(), running(false) { initialize(); }
     
     void initialize();
     void print_info() const;

@@ -11,7 +11,7 @@ room.o: constants.h
 
 hotel.o: room.h handle.h
 
-main.o: hotel.h
+main.o: hotel.h Menu.h
 
 clean:
 	rm $(OBJECTS) $(TARGET)

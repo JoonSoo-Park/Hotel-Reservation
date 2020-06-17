@@ -7,7 +7,7 @@ class Handle {
 public:
     Handle() : data(0) { }
     Handle(T* rhs) : data(rhs) { }
-    Handle(const Handle& rhs) : data(0) { if (rhs.data) data = new T(rhs.data); }
+    Handle(const Handle& rhs) : data(0) { if (rhs.data) data = new T(*rhs.data); }
     Handle& operator=(const Handle&);
    ~Handle() {
        delete data;
