@@ -31,8 +31,8 @@ void do_work(hotel* hot, MENU_INPUT m)
 
 int main()
 {
-    hotel* hot = new hotel();
-    Menu* menu = new Menu();
+    auto hot = new hotel();
+    auto menu = new Menu();
 
     while (hot->is_running()) {
         string input;

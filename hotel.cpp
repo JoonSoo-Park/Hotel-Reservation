@@ -7,7 +7,8 @@
 using namespace std;
 
 enum ROOM_TYPE {
-    SINGLE = 1,
+    UNDEFINED = 0,
+    SINGLE,
     SWEET
 };
 
@@ -25,8 +26,8 @@ void hotel::initialize() {
             break;
     } 
 
-    ROOM_TYPE room_number;
-    ROOM_TYPE room_type;
+    auto room_number = ROOM_TYPE::UNDEFINED;
+    auto room_type = ROOM_TYPE::UNDEFINED;
     while (getline(infile, line)) {
         sscanf(line.c_str(), "%d : %d", &room_number, &room_type);
         if (room_type == ROOM_TYPE::SINGLE) {
@@ -42,17 +43,19 @@ void hotel::initialize() {
 }
 
 void hotel::print_info() const {
-    for (vector<Handle<room> >::size_type i = 0; i < rooms.size(); ++i) {
+    for (auto i = 0; i < rooms.size(); ++i) {
         if (rooms[i]) {
-            cout << "room" << i << " " << rooms[i]->get_price() << endl;
+            cout << "room" << static_cast<int>(i) << " " <<
+                 rooms[static_cast<int>(i)]->get_price() << endl;
         }
     }
 }
 
 int hotel::reserve() {
-    int start, end;
+    int start;
+    int end;
     char c;
-    bool success = false;
+    auto success = false;
 
     if ((get_input_with_msg("Enter starting date(-1 to cancle): ", start)) == -1) {
         return -1;
@@ -62,26 +65,26 @@ int hotel::reserve() {
     }
     print_available_rooms(start, end);
 
-    int n;
+    auto n = -1;
     if ((get_input_with_msg("Enter room number to reserve(-1 to cancle)", n)) == -1) {
         return -1;
     }
         
-    rooms[n]->reserve(start, end);
+    rooms[static_cast<int>(n)]->reserve(start, end);
     return 0; // success
 }
 
 void hotel::cancle_reservation() {
     cout << "************ Cancle Reservation **************\n";
 
-    int is_reserved = show_reservation_state();
+    auto is_reserved = show_reservation_state();
 
     if (is_reserved) {
-        int room_number = 0;
+        auto room_number = 0;
         get_input_with_msg("Enter room number to cancle: ", room_number);
 
         if (room_number >= 0 && room_number < rooms.size()) {
-            int idx = 0;
+            auto idx = 0;
             rooms[room_number]->cancle_reservation();
         } else {
             throw std::runtime_error("Invalid room number!");
@@ -92,8 +95,8 @@ void hotel::cancle_reservation() {
 void hotel::print_available_rooms(int start, int end) const {
     cout << "************ Available rooms list **************\n";
 
-    for (vector<Handle<room> >::size_type i = 0; i < rooms.size(); ++i) {
-        if (rooms[i]->available(start, end)) {
+    for (auto i = 0; i < rooms.size(); ++i) {
+        if (rooms[static_cast<int>(i)]->available(start, end)) {
             cout << "room[" << static_cast<int>(i) << "]\n";
         }
     }
@@ -103,10 +106,10 @@ int hotel::show_reservation_state() const {
     int count = 0;
 
     cout << "************ Room Reservation State **************\n";
-    for (vector<Handle<room> >::size_type i = 0; i < rooms.size(); ++i) {
-        if (rooms[i]) {
+    for (auto i = 0; i < rooms.size(); ++i) {
+        if (rooms[static_cast<int>(i)]) {
             cout << "room" << static_cast<int>(i) << endl;
-            rooms[i]->show_reservation_state();
+            rooms[static_cast<int>(i)]->show_reservation_state();
             cout << endl;
             count++;
         }
