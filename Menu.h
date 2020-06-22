@@ -4,9 +4,10 @@
 #include <string>
 #include <algorithm>
 
-enum MENU_INPUT {
-    RESERVATION = 0,
+enum class MENU_INPUT {
+    RESERVATION = 1,
     SHOW_RESERVATION_STATE,
+    MODIFY_RESERVATION,
     CANCLE_RESERVATION,
     QUIT,
     ERROR
@@ -18,7 +19,8 @@ public:
         puts("*************** MENU *************");
         puts("1. Reservation");
         puts("2. Show Reservation State");
-        puts("3. Cancel Reservation");
+        puts("3. Modify Reservation");
+        puts("4. Cancel Reservation");
         puts("-1. quit");
     }
 
@@ -32,15 +34,20 @@ public:
             input == "2") {
                 return MENU_INPUT::SHOW_RESERVATION_STATE;
         }
+        else if (input == "modify reservation" ||
+            input == "modifyreservation" ||
+            input == "3") {
+                return MENU_INPUT::MODIFY_RESERVATION;
+        }
         else if (input == "cancle reservation" ||
             input == "canclereservation" ||
-            input == "3") {
+            input == "4") {
                 return MENU_INPUT::CANCLE_RESERVATION;
         }
         else if (input == "quit" || input == "-1") {
             return MENU_INPUT::QUIT;
         }
-        return ERROR;
+        return MENU_INPUT::ERROR;
     }
 private:
 

@@ -6,7 +6,7 @@
 
 using namespace std;
 
-enum ROOM_TYPE {
+enum class ROOM_TYPE {
     UNDEFINED = 0,
     SINGLE,
     SWEET
@@ -66,12 +66,28 @@ int hotel::reserve() {
     print_available_rooms(start, end);
 
     auto n = -1;
+    /*
     if ((get_input_with_msg("Enter room number to reserve(-1 to cancle)", n)) == -1) {
         return -1;
+    }
+    */
+
+    while (true) {
+        get_input_with_msg("Enter room number to reserve(-1 to cancle)", n);
+        if (n == -1) {
+            return -1;
+        }
+        if (rooms[n]->available(start, end)) {
+            break;
+        }
     }
         
     rooms[static_cast<int>(n)]->reserve(start, end);
     return 0; // success
+}
+
+void hotel::modify_reservation() {
+    puts("************ Modify Reservation");
 }
 
 void hotel::cancle_reservation() {

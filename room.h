@@ -41,10 +41,10 @@ private:
 
 class single : public room {
 public:
-    double get_price() const {
+    double get_price() const override {
         return room::get_price() * 1.0;
     }
-    virtual single* clone() const {
+    virtual single* clone() const override {
         return new single(*this);
     }
 private:
@@ -52,10 +52,10 @@ private:
 
 class sweet : public room {
 public:
-    double get_price() const {
+    double get_price() const override {
         return room::get_price() * 3.5;
     }
-    virtual sweet* clone() const {
+    virtual sweet* clone() const override {
         return new sweet(*this);
     }
 private:

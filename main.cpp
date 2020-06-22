@@ -16,6 +16,9 @@ void do_work(hotel* hot, MENU_INPUT m)
     case MENU_INPUT::SHOW_RESERVATION_STATE:
         hot->show_reservation_state();
         break; 
+    case MENU_INPUT::MODIFY_RESERVATION:
+        hot->modify_reservation();
+        break;
     case MENU_INPUT::CANCLE_RESERVATION:
         hot->cancle_reservation();
         break;

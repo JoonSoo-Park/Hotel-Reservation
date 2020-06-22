@@ -7,10 +7,13 @@
 class hotel {
 public:
     hotel() : rooms(), running(false) { initialize(); }
+    hotel(const hotel&) = delete;
+    hotel& operator=(const hotel&) = delete;
     
     void initialize();
     void print_info() const;
     int reserve();
+    void modify_reservation();
     void cancle_reservation();
     int show_reservation_state() const;
     void exit_program() {

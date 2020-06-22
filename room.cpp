@@ -8,7 +8,7 @@ using std::endl;
 using std::sort;
 using std::vector;
 
-enum ROOM_CONSTS {
+enum class ROOM_CONSTS {
     QUIT = -1
 };
 
@@ -27,7 +27,8 @@ bool room::available(int start, int end) const {
         auto en = dates[i].end_date;
 
         if ((start >= st && start < en) ||
-            (end > st && end <= en))
+            (end > st && end <= en) || 
+            (start <= st && end >= en))
             return false;
     }
     return true;
