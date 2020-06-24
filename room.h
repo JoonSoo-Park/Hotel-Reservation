@@ -19,6 +19,7 @@ public:
         return reserve_end_date;
     }
     virtual void reserve(int start, int end);
+    int modify_reservation();
     void cancle_reservation();
     virtual void show_reservation_state() const;
     bool available(int start, int end) const;

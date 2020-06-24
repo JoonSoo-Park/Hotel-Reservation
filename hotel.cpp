@@ -87,7 +87,21 @@ int hotel::reserve() {
 }
 
 void hotel::modify_reservation() {
-    puts("************ Modify Reservation");
+    puts("************ Modify Reservation **************\n");
+
+    auto is_reserved = show_reservation_state();
+
+    if (is_reserved) {
+        auto room_number = 0;
+        get_input_with_msg("Enter room number to modify: ", room_number);
+
+        if (room_number >= 0 && room_number < rooms.size() && rooms[room_number]) {
+            auto idx = 0;
+            rooms[room_number]->modify_reservation();
+        } else {
+            throw std::runtime_error("Modify Reservation: Invalid room number!");
+        }
+    }
 }
 
 void hotel::cancle_reservation() {
