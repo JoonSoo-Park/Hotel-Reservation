@@ -3,6 +3,7 @@
 #include "./room.h"
 #include "./handle.h"
 #include <vector>
+#include <memory>
 
 class hotel {
 public:
@@ -24,6 +25,7 @@ public:
     }
 private:
     std::vector<Handle<room> > rooms;
+
     bool running;
 
     void print_available_rooms(int start, int end) const;

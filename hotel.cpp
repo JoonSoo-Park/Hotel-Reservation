@@ -4,7 +4,14 @@
 #include <fstream>
 #include <string>
 
-using namespace std;
+using std::unique_ptr;
+using std::string;
+using std::ifstream;
+using std::vector;
+using std::cout;
+using std::endl;
+using std::cerr;
+using std::make_unique;
 
 enum class ROOM_TYPE {
     UNDEFINED = 0,
