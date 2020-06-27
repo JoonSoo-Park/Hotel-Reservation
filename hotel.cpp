@@ -33,15 +33,15 @@ void hotel::initialize() {
             break;
     } 
 
-    auto room_number = ROOM_TYPE::UNDEFINED;
-    auto room_type = ROOM_TYPE::UNDEFINED;
+    auto room_number = static_cast<int>(ROOM_TYPE::UNDEFINED);
+    auto room_type = static_cast<int>(ROOM_TYPE::UNDEFINED);
     while (getline(infile, line)) {
         sscanf(line.c_str(), "%d : %d", &room_number, &room_type);
-        if (room_type == ROOM_TYPE::SINGLE) {
-            rooms.push_back(Handle<room>(new single()));
+        if (room_type == static_cast<int>(ROOM_TYPE::SINGLE)) {
+            rooms.push_back(make_unique<single>());
         } 
-        else if (room_type == ROOM_TYPE::SWEET) {
-            rooms.push_back(Handle<room>(new sweet()));
+        else if (room_type == static_cast<int>(ROOM_TYPE::SWEET)) {
+            rooms.push_back(make_unique<sweet>());
         }
     }
     infile.close();
@@ -51,9 +51,9 @@ void hotel::initialize() {
 
 void hotel::print_info() const {
     for (auto i = 0; i < rooms.size(); ++i) {
-        if (rooms[i]) {
+        if (rooms[i]->Is_reserved()) {
             cout << "room" << static_cast<int>(i) << " " <<
-                 rooms[static_cast<int>(i)]->get_price() << endl;
+                rooms[static_cast<int>(i)]->get_price() << endl;
         }
     }
 }
@@ -67,22 +67,23 @@ int hotel::reserve() {
     if ((get_input_with_msg("Enter starting date(-1 to cancle): ", start)) == -1) {
         return -1;
     }
-    if ((get_input_with_msg("Enter ending date(-1 to cancle): ", end)) == -1) {
-        return -1;
-    }
+    do {
+        if ((get_input_with_msg("Enter ending date(-1 to cancle): ", end)) == -1) {
+            return -1;
+        }
+    } while (!check_end_date_validity(start, end));
     print_available_rooms(start, end);
 
     auto n = -1;
-    /*
-    if ((get_input_with_msg("Enter room number to reserve(-1 to cancle)", n)) == -1) {
-        return -1;
-    }
-    */
 
     while (true) {
         get_input_with_msg("Enter room number to reserve(-1 to cancle)", n);
         if (n == -1) {
             return -1;
+        }
+        if (n < 0 || n >= rooms.size()) {
+            print_error("Wrong input! Please enter room number properly");
+            continue;
         }
         if (rooms[n]->available(start, end)) {
             break;
@@ -144,7 +145,7 @@ int hotel::show_reservation_state() const {
 
     cout << "************ Room Reservation State **************\n";
     for (auto i = 0; i < rooms.size(); ++i) {
-        if (rooms[static_cast<int>(i)]) {
+        if (rooms[static_cast<int>(i)]->Is_reserved()) {
             cout << "room" << static_cast<int>(i) << endl;
             rooms[static_cast<int>(i)]->show_reservation_state();
             cout << endl;

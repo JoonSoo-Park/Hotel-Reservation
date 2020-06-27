@@ -2,6 +2,8 @@
 #include "./constants.h"
 #include <iostream>
 #include <algorithm>
+#include <assert.h>
+#include <cctype>
 
 using std::cout;
 using std::endl;
@@ -14,6 +16,21 @@ enum class ROOM_CONSTS {
     MODIFY = -1,
     NONE = -1
 };
+
+bool room::check_date_validity(int new_date, int idx)
+{
+    using sz_type = vector<reserved_date>::size_type;
+    for (sz_type i = 0; i < dates.size(); ++i) {
+        if (static_cast<int>(i) == idx) {
+            continue;
+        }
+        if (dates[i].start_date <= new_date && new_date <= dates[i].end_date) {
+            cout << "Date already reserved!\n";
+            return false;
+        }
+    }
+    return true;
+}
 
 void room::reserve(int start, int end) {
     reserved_date temp { start, end };
@@ -44,21 +61,29 @@ int room::modify_reservation()
     auto idx = static_cast<int>(ROOM_CONSTS::MODIFY);
     get_input_with_msg("Enter reeservation number to modify: ", idx);
 
-    if (idx >= 0 && idx < dates.size()) {
-        auto new_start_date = static_cast<int>(ROOM_CONSTS::NONE);
-        auto new_end_date = static_cast<int>(ROOM_CONSTS::NONE);
-        if ((get_input_with_msg("Enter new starting date(-1 to cancle): ", new_start_date)) == -1) {
-            return -1;
-        }
-        if ((get_input_with_msg("Enter new ending date(-1 to cancle): ", new_end_date)) == -1) {
-            return -1;
-        }
-
-        dates[idx].start_date = new_start_date;
-        dates[idx].end_date = new_end_date;
-    } else {
-        throw runtime_error("Modify_Reservation: Wrong reservation number was entered!");
+    if (idx < 0 || idx >= dates.size()) {
+        return 0;
     }
+
+    auto new_start_date = static_cast<int>(ROOM_CONSTS::NONE);
+    auto new_end_date = static_cast<int>(ROOM_CONSTS::NONE);
+
+    do {
+        if (get_input_with_msg("Enter new start date: ", new_start_date) == -1) {
+            return -1;
+        }
+    } while (!check_date_validity(new_start_date, idx));
+
+    do {
+        if (get_input_with_msg("Enter new end date: ", new_end_date) == -1) {
+            return -1;
+        }
+    } while (!check_end_date_validity(new_start_date, new_end_date) ||
+             !check_date_validity(new_end_date, idx));
+
+    modify_dates(idx, new_start_date, new_end_date);
+
+    return 1;
 }
 
 void room::cancle_reservation() {
@@ -85,5 +110,31 @@ void room::show_reservation_state() const {
         cout << static_cast<int>(i) << " ";
         cout << "Reserved: " <<  start_date <<
             " ~ " << end_date << endl;
+    }
+}
+
+void room::modify_dates(int idx, int new_start_date, int new_end_date)
+{
+    const char yes = 'y';
+    const char no = 'n';
+
+    cout << "New reservation date " << new_start_date << " ~ " << new_end_date << endl;
+
+    while (true) {
+        char c;
+
+        cout << "Apply change? (y / n): ";
+        get_single_char(c);
+
+        c = tolower(c);
+        if (c == yes) {
+            dates[idx].start_date = new_start_date;
+            dates[idx].end_date = new_end_date;
+            cout << "Changes have been applied.\n";
+            break;
+        } else if (c == no) {
+            cout << "No changes are applied.\n";
+            return;
+        }
     }
 }

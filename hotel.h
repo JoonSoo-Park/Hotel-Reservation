@@ -8,15 +8,19 @@
 class hotel {
 public:
     hotel() : rooms(), running(false) { initialize(); }
+
+    // disable copy cont, operator=
     hotel(const hotel&) = delete;
     hotel& operator=(const hotel&) = delete;
     
     void initialize();
     void print_info() const;
+
     int reserve();
+    int show_reservation_state() const;
     void modify_reservation();
     void cancle_reservation();
-    int show_reservation_state() const;
+
     void exit_program() {
         running = false;
     }
@@ -24,7 +28,7 @@ public:
         return running;
     }
 private:
-    std::vector<Handle<room> > rooms;
+    std::vector<std::unique_ptr<room> > rooms;
 
     bool running;
 
