@@ -50,3 +50,105 @@ void print_error(const char* msg)
 
     return;
 }
+
+int get_year(int& year)
+{
+    while (true) {
+        int ret = get_input_with_msg("Enter year: ", year);
+        if (!ret || (year > 0 && year <= 9999)) {
+            break;
+        } else if (ret == -1) {
+            return -1;
+        }
+    }
+    return 0;
+}
+
+int get_month(int& month)
+{
+    while (true) {
+        int ret = get_input_with_msg("Enter month: ", month);
+        if (!ret || (month > 0 && month < 13)) {
+            break;
+        } else if (ret == -1) {
+            return -1;
+        }
+    }
+    return 0;
+}
+
+bool is_youn_year(int& y)
+{
+    return (y % 4 == 0 && (y % 100 != 0 || y % 400 == 0));
+}
+
+int get_day(res_date& R)
+{
+    while (true) {
+        int ret = get_input_with_msg("Enter day: ", R.day);
+        if (ret == -1) {
+            return -1;
+        }
+
+        if (R.month == 2) {
+            if (is_youn_year(R.year)) {
+                if (R.day > 0 && R.day <= 27) {
+                    break;
+                }
+            }
+            else {
+                if (R.day > 0 && R.day <= 28) {
+                    break;
+                }
+            }
+        } else if (R.month == 1 || R.month == 3 || R.month == 5 || R.month == 7 ||
+                    R.month == 8 || R.month == 10 || R.month == 12){
+            if (R.day > 0 && R.day <= 31) {
+                break;
+            }
+        } else {
+            if (R.day > 0 && R.day <= 30) {
+                break;
+            }
+        }
+    }
+    return 0;
+}
+
+res_date get_reservation_start()
+{
+    res_date start{0, 0, 0};
+
+    get_year(start.year);
+    get_month(start.month);
+    get_day(start);
+
+    return start;
+}
+
+res_date get_reservation_end(res_date& start)
+{
+    res_date end{0, 0, 0};
+
+    do {
+        get_year(end.year);
+    } while (start.year > end.year);
+
+    do {
+        get_month(end.month);
+        if ((end.year == start.year && end.month >= start.month) ||
+            (end.year > start.year)) {
+                break;
+        }
+    } while (true);
+
+    do {
+        get_day(end);
+        if ((start.month == end.month && start.day < end.day) || 
+            (start.month < end.month)) {
+                break;
+        }
+    } while (true);
+
+    return end;
+}
