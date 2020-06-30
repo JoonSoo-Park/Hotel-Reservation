@@ -1,28 +1,34 @@
 #ifndef RESERVATION_H
 #define RESERVATION_H
-
+#include <vector>
 #include <ctime>
+
+typedef struct res_date;
 
 class Reservation {
 public:
-    Reservation() : time_info(nullptr) {
-        Initialize();
-    }
-    Reservation(int year, int month, int day) : time_info(nullptr) { 
-        Initialize();
-        Reserve(year, month, day);
-    }
+    Reservation() = delete;
+    Reservation(res_date, res_date);
     ~Reservation() {
-        delete time_info;
+        delete start_info;
+        delete end_info;
     }
-    void Initialize();
-    void Reserve(int, int, int);
-    void Modify();
+
+    Reservation& operator=(const Reservation&) = delete;
+    Reservation(const Reservation&) = delete;
+
+    void Modify(res_date, res_date);
     void Print() const;
+    std::vector<time_t> Mktime() const;
 private:
     // 예약 내용
-    time_t t;
-    struct tm* time_info;
+    struct tm* start_info;
+    struct tm* end_info;
+    res_date start_date;
+    res_date end_date;
+
+    void Initialize();
+    void Reserve();
 };
 
 #endif

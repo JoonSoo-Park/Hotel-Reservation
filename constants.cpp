@@ -55,7 +55,7 @@ int get_year(int& year)
 {
     while (true) {
         int ret = get_input_with_msg("Enter year: ", year);
-        if (!ret || (year > 0 && year <= 9999)) {
+        if (!ret || (year > 1900 && year <= 9999)) {
             break;
         } else if (ret == -1) {
             return -1;
