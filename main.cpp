@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <stdexcept>
+#include <cstdlib>
 #include "./hotel.h"
 #include "./Menu.h"
 
@@ -11,16 +12,23 @@ void do_work(hotel* hot, MENU_INPUT m)
     switch (m)
     {
     case MENU_INPUT::RESERVATION:
+        system("clear");
         hot->reserve();
+        system("clear");
         break;
     case MENU_INPUT::SHOW_RESERVATION_STATE:
+        system("clear");
         hot->show_reservation_state();
         break; 
     case MENU_INPUT::MODIFY_RESERVATION:
+        system("clear");
         hot->modify_reservation();
+        system("clear");
         break;
     case MENU_INPUT::CANCLE_RESERVATION:
+        system("clear");
         hot->cancle_reservation();
+        system("clear");
         break;
     case MENU_INPUT::QUIT:
         puts("Exiting program");

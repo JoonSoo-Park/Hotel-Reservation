@@ -51,11 +51,11 @@ void print_error(const char* msg)
     return;
 }
 
-int get_year(int& year)
+int get_year(const char* msg, int& year)
 {
     while (true) {
-        int ret = get_input_with_msg("Enter year: ", year);
-        if (!ret || (year > 1900 && year <= 9999)) {
+        int ret = get_input_with_msg(msg, year);
+        if (!ret && (year > 1900 && year <= 9999)) {
             break;
         } else if (ret == -1) {
             return -1;
@@ -64,11 +64,11 @@ int get_year(int& year)
     return 0;
 }
 
-int get_month(int& month)
+int get_month(const char* msg, int& month)
 {
     while (true) {
-        int ret = get_input_with_msg("Enter month: ", month);
-        if (!ret || (month > 0 && month < 13)) {
+        int ret = get_input_with_msg(msg, month);
+        if (!ret && (month > 0 && month < 13)) {
             break;
         } else if (ret == -1) {
             return -1;
@@ -82,32 +82,32 @@ bool is_youn_year(int& y)
     return (y % 4 == 0 && (y % 100 != 0 || y % 400 == 0));
 }
 
-int get_day(res_date& R)
+int get_day(const char* msg, struct tm& R)
 {
     while (true) {
-        int ret = get_input_with_msg("Enter day: ", R.day);
+        int ret = get_input_with_msg(msg, R.tm_mday);
         if (ret == -1) {
             return -1;
         }
 
-        if (R.month == 2) {
-            if (is_youn_year(R.year)) {
-                if (R.day > 0 && R.day <= 27) {
+        if (R.tm_mon == 2) {
+            if (is_youn_year(R.tm_year)) {
+                if (R.tm_mday > 0 && R.tm_mday <= 27) {
                     break;
                 }
             }
             else {
-                if (R.day > 0 && R.day <= 28) {
+                if (R.tm_mday > 0 && R.tm_mday <= 28) {
                     break;
                 }
             }
-        } else if (R.month == 1 || R.month == 3 || R.month == 5 || R.month == 7 ||
-                    R.month == 8 || R.month == 10 || R.month == 12){
-            if (R.day > 0 && R.day <= 31) {
+        } else if (R.tm_mon == 1 || R.tm_mon == 3 || R.tm_mon == 5 || R.tm_mon == 7 ||
+                    R.tm_mon == 8 || R.tm_mon == 10 || R.tm_mon == 12){
+            if (R.tm_mday > 0 && R.tm_mday <= 31) {
                 break;
             }
         } else {
-            if (R.day > 0 && R.day <= 30) {
+            if (R.tm_mday > 0 && R.tm_mday <= 30) {
                 break;
             }
         }
@@ -115,40 +115,60 @@ int get_day(res_date& R)
     return 0;
 }
 
-res_date get_reservation_start()
+int get_reservation_start(struct tm& start)
 {
-    res_date start{0, 0, 0};
+    if (get_year("Enter starting year: ", start.tm_year) == -1) {
+        return -1;
+    }
+    // cout << start->tm_year << endl;
+    if (get_month("Enter starting month: ", start.tm_mon) == -1) {
+        return -1;
+    }
+    // cout << start->tm_mon << endl;
+    if (get_day("Enter starting day: ", start) == -1) {
+        return -1;
+    }
+    // cout << start->tm_mday << endl;
 
-    get_year(start.year);
-    get_month(start.month);
-    get_day(start);
-
-    return start;
+    return 0;
 }
 
-res_date get_reservation_end(res_date& start)
+int get_reservation_end(struct tm& start, struct tm& end)
 {
-    res_date end{0, 0, 0};
+    cout << "************* Reservation ending date *************\n";
+    do {
+        if (get_year("Enter ending year: ", end.tm_year) == -1) {
+            return -1;
+        }
+    } while (start.tm_year > end.tm_year);
 
     do {
-        get_year(end.year);
-    } while (start.year > end.year);
+        if (get_month("Enter ending month: ", end.tm_mon) == -1) {
+            return -1;
+        }
+        if ((start.tm_year == end.tm_year && start.tm_mon <= end.tm_mon) ||
+            (start.tm_year < end.tm_year)) {
+            break;
+        }
+    } while (true);
+    // cout << end->tm_mon << endl;
 
     do {
-        get_month(end.month);
-        if ((end.year == start.year && end.month >= start.month) ||
-            (end.year > start.year)) {
+        if (get_day("Enter ending day: ", end) == -1) {
+            return -1;
+        }
+        if (start.tm_year == end.tm_year) {
+            if (start.tm_mon == end.tm_mon) {
+                if (start.tm_mday < end.tm_mday) {
+                    break;
+                }
+            } else if (start.tm_mon < end.tm_mon) {
                 break;
+            } 
         }
     } while (true);
 
-    do {
-        get_day(end);
-        if ((start.month == end.month && start.day < end.day) || 
-            (start.month < end.month)) {
-                break;
-        }
-    } while (true);
 
-    return end;
+
+    return 0;
 }

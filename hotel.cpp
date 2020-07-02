@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cstdlib>
 
 using std::unique_ptr;
 using std::string;
@@ -64,18 +65,32 @@ int hotel::reserve() {
     char c;
     auto success = false;
 
-    if ((get_input_with_msg("Enter starting date(-1 to cancle): ", start)) == -1) {
+    cout << "************ Reservation ************\n";
+    time_t now;
+    struct tm* t;
+    struct tm S;
+    struct tm E;
+
+    time(&now);
+    t = localtime(&now);
+    S = *t;
+    E = *t;
+
+    if (get_reservation_start(S) == -1) {
         return -1;
     }
-    do {
-        if ((get_input_with_msg("Enter ending date(-1 to cancle): ", end)) == -1) {
-            return -1;
-        }
-    } while (!check_end_date_validity(start, end));
-    print_available_rooms(start, end);
+    if (get_reservation_end(S, E) == -1) {
+        return -1;
+    }
+
+    S.tm_year -= 1900;
+    E.tm_year -= 1900;
+    S.tm_mon--;
+    E.tm_mon--;
+
+    print_available_rooms(S, E);
 
     auto n = -1;
-
     while (true) {
         get_input_with_msg("Enter room number to reserve(-1 to cancle)", n);
         if (n == -1) {
@@ -85,13 +100,31 @@ int hotel::reserve() {
             print_error("Wrong input! Please enter room number properly");
             continue;
         }
-        if (rooms[n]->available(start, end)) {
+        if (rooms[n]->available(S, E, -1)) {
             break;
         }
     }
-        
-    rooms[static_cast<int>(n)]->reserve(start, end);
+
+    rooms[static_cast<int>(n)]->reserve(S, E);
     return 0; // success
+}
+
+int hotel::show_reservation_state() const {
+    int count = 0;
+
+    cout << "************ Room Reservation State **************\n";
+    for (auto i = 0; i < rooms.size(); ++i) {
+        if (rooms[static_cast<int>(i)]->Is_reserved()) {
+            cout << "Room" << static_cast<int>(i) << endl;
+            rooms[static_cast<int>(i)]->show_reservation_state();
+            cout << endl;
+            count++;
+        }
+    } 
+    if (count == 0) {
+        cout << "No rooms are reserved\n";
+    }
+    return count;
 }
 
 void hotel::modify_reservation() {
@@ -130,30 +163,12 @@ void hotel::cancle_reservation() {
     }
 }
 
-void hotel::print_available_rooms(int start, int end) const {
+void hotel::print_available_rooms(struct tm& S, struct tm& E) const {
     cout << "************ Available rooms list **************\n";
 
     for (auto i = 0; i < rooms.size(); ++i) {
-        if (rooms[static_cast<int>(i)]->available(start, end)) {
+        if (rooms[static_cast<int>(i)]->available(S, E, -1)) {
             cout << "room[" << static_cast<int>(i) << "]\n";
         }
     }
-}
-
-int hotel::show_reservation_state() const {
-    int count = 0;
-
-    cout << "************ Room Reservation State **************\n";
-    for (auto i = 0; i < rooms.size(); ++i) {
-        if (rooms[static_cast<int>(i)]->Is_reserved()) {
-            cout << "room" << static_cast<int>(i) << endl;
-            rooms[static_cast<int>(i)]->show_reservation_state();
-            cout << endl;
-            count++;
-        }
-    } 
-    if (count == 0) {
-        cout << "No rooms are reserved\n";
-    }
-    return count;
 }

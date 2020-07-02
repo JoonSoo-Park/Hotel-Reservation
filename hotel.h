@@ -29,10 +29,9 @@ public:
     }
 private:
     std::vector<std::unique_ptr<room> > rooms;
-
     bool running;
 
-    void print_available_rooms(int start, int end) const;
+    void print_available_rooms(struct tm&, struct tm&) const;
 };
 
 #endif

@@ -3,32 +3,29 @@
 #include <vector>
 #include <ctime>
 
-typedef struct res_date;
-
 class Reservation {
 public:
     Reservation() = delete;
-    Reservation(res_date, res_date);
-    ~Reservation() {
-        delete start_info;
-        delete end_info;
-    }
+    Reservation(struct tm&, struct tm&);
 
-    Reservation& operator=(const Reservation&) = delete;
-    Reservation(const Reservation&) = delete;
-
-    void Modify(res_date, res_date);
+    void Modify(struct tm&, struct tm&);
     void Print() const;
-    std::vector<time_t> Mktime() const;
+    time_t MktimeS() {
+        return mktime(&start_info);
+    }
+    time_t MktimeE() {
+        return mktime(&end_info);
+    }
+    
+    static bool compare(Reservation& a, Reservation& b);
 private:
     // 예약 내용
-    struct tm* start_info;
-    struct tm* end_info;
-    res_date start_date;
-    res_date end_date;
+    struct tm start_info;
+    struct tm end_info;
 
     void Initialize();
-    void Reserve();
+    void Reserve(struct tm&, struct tm&);
 };
+
 
 #endif
