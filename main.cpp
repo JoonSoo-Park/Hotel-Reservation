@@ -2,6 +2,7 @@
 #include <vector>
 #include <stdexcept>
 #include <cstdlib>
+#include <plog/Log.h>
 #include "./hotel.h"
 #include "./Menu.h"
 
@@ -12,25 +13,38 @@ void do_work(hotel* hot, MENU_INPUT m)
     switch (m)
     {
     case MENU_INPUT::RESERVATION:
+        PLOGI << "Reservation";
         system("clear");
-        hot->reserve();
+        if (hot->reserve() == -1) {
+            PLOGI << "Cancled";
+        }
         system("clear");
         break;
     case MENU_INPUT::SHOW_RESERVATION_STATE:
+        PLOGI << "Show Reservation";
         system("clear");
-        hot->show_reservation_state();
+        if (hot->show_reservation_state() == -1) {
+            PLOGI << "Cancled";
+        }
         break; 
     case MENU_INPUT::MODIFY_RESERVATION:
+        PLOGI << "Modify Reservation";
         system("clear");
-        hot->modify_reservation();
+        if (hot->modify_reservation() == -1) {
+            PLOGI << "Cancled";
+        }
         system("clear");
         break;
     case MENU_INPUT::CANCLE_RESERVATION:
+        PLOGI << "Cancle Reservation";
         system("clear");
-        hot->cancle_reservation();
+        if (hot->cancle_reservation() == -1) {
+            PLOGI << "Cancled";
+        }
         system("clear");
         break;
     case MENU_INPUT::QUIT:
+        PLOGI << "Quit";
         puts("Exiting program");
         hot->exit_program();
         break;
@@ -44,6 +58,8 @@ int main()
 {
     auto hot = new hotel();
     auto menu = new Menu();
+
+    plog::init(plog::verbose, "Log.txt");
 
     while (hot->is_running()) {
         string input;

@@ -4,6 +4,9 @@
 #include <fstream>
 #include <string>
 #include <cstdlib>
+#include <plog/Log.h>
+#include <vector>
+#include <string>
 
 using std::unique_ptr;
 using std::string;
@@ -105,7 +108,10 @@ int hotel::reserve() {
         }
     }
 
-    rooms[static_cast<int>(n)]->reserve(S, E);
+
+    int tn = static_cast<int>(n);
+    rooms[tn]->reserve(tn, S, E);
+
     return 0; // success
 }
 
@@ -127,40 +133,49 @@ int hotel::show_reservation_state() const {
     return count;
 }
 
-void hotel::modify_reservation() {
+int hotel::modify_reservation() {
     puts("************ Modify Reservation **************\n");
 
     auto is_reserved = show_reservation_state();
 
     if (is_reserved) {
         auto room_number = 0;
-        get_input_with_msg("Enter room number to modify: ", room_number);
+        if(get_input_with_msg("Enter room number to modify: ", room_number) == -1) {
+            return -1;
+        }
 
         if (room_number >= 0 && room_number < rooms.size() && rooms[room_number]) {
             auto idx = 0;
-            rooms[room_number]->modify_reservation();
+            if (rooms[room_number]->modify_reservation() == -1) {
+                return -1;
+            }
         } else {
             throw std::runtime_error("Modify Reservation: Invalid room number!");
         }
     }
+
+    return 0;
 }
 
-void hotel::cancle_reservation() {
+int hotel::cancle_reservation() {
     cout << "************ Cancle Reservation **************\n";
 
     auto is_reserved = show_reservation_state();
 
     if (is_reserved) {
         auto room_number = 0;
-        get_input_with_msg("Enter room number to cancle: ", room_number);
+        if (get_input_with_msg("Enter room number to cancle: ", room_number) == -1) {
+            return -1;
+        }
 
         if (room_number >= 0 && room_number < rooms.size()) {
             auto idx = 0;
-            rooms[room_number]->cancle_reservation();
+            rooms[room_number]->cancle_reservation(static_cast<int>(room_number));
         } else {
             throw std::runtime_error("Invalid room number!");
         }
     }
+    return 0;
 }
 
 void hotel::print_available_rooms(struct tm& S, struct tm& E) const {

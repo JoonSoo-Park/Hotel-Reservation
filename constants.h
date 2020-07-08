@@ -5,6 +5,12 @@
 #include <cctype>
 #include <algorithm>
 
+enum {
+    ReservationLog = 1,
+    RoomLog,
+    HotelLog
+};
+
 int get_single_char(char&);
 
 int get_single_int(int&);

@@ -18,8 +18,8 @@ public:
 
     int reserve();
     int show_reservation_state() const;
-    void modify_reservation();
-    void cancle_reservation();
+    int modify_reservation();
+    int cancle_reservation();
 
     void exit_program() {
         running = false;

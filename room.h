@@ -13,10 +13,10 @@ public:
         return price;
     }
 
-    virtual void reserve(struct tm&, struct tm&);
+    virtual void reserve(int, struct tm&, struct tm&);
     virtual void show_reservation_state() const;
     int modify_reservation();
-    void cancle_reservation();
+    void cancle_reservation(int);
 
     bool available(struct tm&, struct tm&, int);
     bool Is_reserved() const noexcept {

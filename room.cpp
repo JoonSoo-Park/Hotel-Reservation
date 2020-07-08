@@ -6,6 +6,7 @@
 #include <assert.h>
 #include <cctype>
 #include <iomanip>
+#include <plog/Log.h>
 
 using std::cout;
 using std::endl;
@@ -19,8 +20,8 @@ enum class ROOM_CONSTS {
     NONE = -1
 };
 
-void room::reserve(struct tm& S, struct tm& E) {
-    Reservation reservation(S, E);
+void room::reserve(int my_num, struct tm& S, struct tm& E) {
+    Reservation reservation(my_num, S, E);
     is_reserved = true;
 
     reservations.push_back(reservation);
@@ -46,10 +47,6 @@ int room::modify_reservation()
         return 0;
     }
 
-    // TODO
-    // Get the dates
-    // check if is valid
-    // apply the changes
     time_t rawtime;
     time(&rawtime);
 
@@ -76,13 +73,16 @@ int room::modify_reservation()
     return 1;
 }
 
-void room::cancle_reservation() {
+void room::cancle_reservation(int room_number) {
     show_reservation_state();
 
     auto idx = static_cast<int>(ROOM_CONSTS::QUIT);
     get_input_with_msg("Enter reservation number to cancle: ", idx);
 
     if (idx >= 0 && idx < reservations.size()) {
+        // TODO:
+        // cancle할때, reservation logging
+        PLOGI << "\n\troom[" << room_number << "] cancled: " << reservations[idx].Get_Log();
         reservations.erase(reservations.begin() + idx);
         if (reservations.size() == 0) {
             is_reserved = false;
